@@ -160,11 +160,11 @@ public class Board {
     }
 
     public void hitOrMiss() {
-        if (mySolution[xCoordinate - 1][yCoordinate - 1] == '.') {
-            myBoard[xCoordinate - 1][yCoordinate - 1] = 'O';
+        if (mySolution[yCoordinate - 1][xCoordinate - 1] == '.') {
+            myBoard[yCoordinate - 1][xCoordinate - 1] = 'O';
             System.out.println("Miss!");
         } else {
-            myBoard[xCoordinate - 1][yCoordinate - 1] = 'X';
+            myBoard[yCoordinate - 1][xCoordinate - 1] = 'X';
             System.out.println("Hit!");
             numberOfSuccessfulMissiles++;
         }
@@ -174,7 +174,7 @@ public class Board {
     public void statistics() {
         System.out.println("Number of missiles fired: " + numberOfMissilesFired);
         System.out.println("Number of successful missiles: " + numberOfSuccessfulMissiles);
-        double hitRatio = (double) numberOfSuccessfulMissiles / (double) numberOfMissilesFired;
+        double hitRatio = ((double) numberOfSuccessfulMissiles / (double) numberOfMissilesFired) * 100;
         System.out.println("Hit ratio: " + String.format("%.2f", hitRatio) + "%");
         System.out.println("--------------------------------------------------------------");
     }
