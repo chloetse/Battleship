@@ -153,18 +153,18 @@ public class Board {
     }
 
     public void userMove(Scanner inputS) {
-        xCoordinate = getValidIntegerInputInRange(inputS, "Choose your x-coordinate:", 0, 10) - 1;
-        yCoordinate = getValidIntegerInputInRange(inputS, "Choose your y-coordinate:", 0, 10) - 1;
+        xCoordinate = getValidIntegerInputInRange(inputS, "Choose your x-coordinate:", 0, 10);
+        yCoordinate = getValidIntegerInputInRange(inputS, "Choose your y-coordinate:", 0, 10);
         System.out.println("The coordinates you have chosen are: (" + xCoordinate + ", " + yCoordinate + ")");
         numberOfMissilesFired++;
     }
 
     public void hitOrMiss() {
-        if (mySolution[xCoordinate][yCoordinate] == '*') {
-            myBoard[xCoordinate][yCoordinate] = 'O';
+        if (mySolution[xCoordinate - 1][yCoordinate - 1] == '.') {
+            myBoard[xCoordinate - 1][yCoordinate - 1] = 'O';
             System.out.println("Miss!");
         } else {
-            myBoard[xCoordinate][yCoordinate] = 'X';
+            myBoard[xCoordinate - 1][yCoordinate - 1] = 'X';
             System.out.println("Hit!");
             numberOfSuccessfulMissiles++;
         }
@@ -174,7 +174,8 @@ public class Board {
     public void statistics() {
         System.out.println("Number of missiles fired: " + numberOfMissilesFired);
         System.out.println("Number of successful missiles: " + numberOfSuccessfulMissiles);
-        int hitRatio = numberOfSuccessfulMissiles / numberOfMissilesFired;
-        System.out.println("Hit ratio: " + String.format("%.2f", hitRatio));
+        double hitRatio = (double) numberOfSuccessfulMissiles / (double) numberOfMissilesFired;
+        System.out.println("Hit ratio: " + String.format("%.2f", hitRatio) + "%");
+        System.out.println("--------------------------------------------------------------");
     }
 }
