@@ -1,3 +1,4 @@
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
@@ -8,7 +9,9 @@ public class Board {
     private int row;
     private int col;
     int numberOfMissilesFired;
-    int numberOfShipsSunk;
+    int numberOfSuccessfulMissiles;
+    int xCoordinate;
+    int yCoordinate;
 
     /*
      * Instantiate a new Maze object.
@@ -17,7 +20,7 @@ public class Board {
         row = 0;
         col = 0;
         numberOfMissilesFired = 0;
-        numberOfShipsSunk = 0;
+        numberOfSuccessfulMissiles = 0;
         myBoard = new char[10][10];
         mySolution = new char[10][10];
         fillBoard(myBoard);
@@ -122,34 +125,56 @@ public class Board {
         }
     }
 
-    /*
-     * Determines if the user reached the end of the maze.
-     * @return true if the user is at the end, false otherwise.
-     */
-    public boolean didIWin() {
-        if (row == 10 && col == 19) {
-            return true;
-        } else {
-            return false;
+    /* asks a question that requires an integer input and then checks the validity of the input
+   if the input is not a valid integer (eg. String, char), the program will not continue
+   (hence, the while loop) until a valid integer is inputted
+   this prevents the program from continuing with an incorrect input
+   */
+    private int getValidIntegerInput(Scanner inputS, String question) {
+        System.out.print(question + " "); //prints the question the user must respond to
+        while (!inputS.hasNextInt()) { //while the input is not a valid integer
+            System.err.println("Error: not a valid integer input"); //print the error message of "invalid input"
+            inputS.nextLine(); //keep waiting for input
         }
+        return Integer.parseInt(inputS.nextLine()); //returns the valid input (may be set to a variable)
     }
 
-    public void hitOrMiss(int xCoordinate, int yCoordinate) {
+    //same as getValidIntegerInput, but includes the minimum and maximum  value
+    private int getValidIntegerInputInRange(Scanner inputS, String question, int minValue, int maxValue) {
+        while (true) {
+            int userInputValue = getValidIntegerInput(inputS, question);
+            if (userInputValue < minValue || userInputValue > maxValue) {
+                System.err.println("Error: input not within the valid range"); //prints the error message of "invalid input"
+            } else {
+                return userInputValue;
+            }
+        }
+
+    }
+
+    public void userMove(Scanner inputS) {
+        xCoordinate = getValidIntegerInputInRange(inputS, "Choose your x-coordinate:", 0, 10) - 1;
+        yCoordinate = getValidIntegerInputInRange(inputS, "Choose your y-coordinate:", 0, 10) - 1;
+        System.out.println("The coordinates you have chosen are: (" + xCoordinate + ", " + yCoordinate + ")");
+        numberOfMissilesFired++;
+    }
+
+    public void hitOrMiss() {
         if (mySolution[xCoordinate][yCoordinate] == '*') {
             myBoard[xCoordinate][yCoordinate] = 'O';
             System.out.println("Miss!");
         } else {
             myBoard[xCoordinate][yCoordinate] = 'X';
             System.out.println("Hit!");
-            numberOfShipsSunk++;
+            numberOfSuccessfulMissiles++;
         }
         printBoard();
     }
 
     public void statistics() {
         System.out.println("Number of missiles fired: " + numberOfMissilesFired);
-        System.out.println("Number of ships sunk: " + numberOfShipsSunk);
-        int hitRatio = numberOfShipsSunk / numberOfMissilesFired;
-        System.out.println("Hit ratio: " + hitRatio);
+        System.out.println("Number of successful missiles: " + numberOfSuccessfulMissiles);
+        int hitRatio = numberOfSuccessfulMissiles / numberOfMissilesFired;
+        System.out.println("Hit ratio: " + String.format("%.2f", hitRatio));
     }
 }
