@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
 
@@ -12,7 +11,7 @@ public class Board {
     int numberOfSuccessfulMissiles;
     int xCoordinate;
     int yCoordinate;
-
+    Ship[] ships;
     /*
      * Instantiate a new Maze object.
      */
@@ -25,7 +24,15 @@ public class Board {
         mySolution = new char[10][10];
         fillBoard(myBoard);
         fillBoard(mySolution);
-        placeShips();
+
+        /*    List of ships:
+    1 x (A)ircraft Carrier, size 5
+    1 x (B)attleship, size 4
+    1 x (C)ruiser, size 3
+    2 x (D)estroyers, size 2
+ */
+        ships = new Ship[]{ new Aircraft(), new Battleship(), new Cruiser(), new Destroyers(), new Destroyers() };
+        placeShips(mySolution);
     }
 
     private void fillBoard(char[][] board) {
@@ -84,44 +91,9 @@ public class Board {
     2 x (D)estroyers, size 2
      */
 
-    private void placeShips() {
-        //Aircraft
-        int randomInt = ThreadLocalRandom.current().nextInt(5, 6);
-        //System.out.println("Aircraft random integer: " + randomIntA);
-        for (int i = 0; i < 5; i++) {
-            while (mySolution[randomInt][randomInt + i] != '.') {
-                randomInt = ThreadLocalRandom.current().nextInt(5, 6);
-            }
-            mySolution[randomInt][randomInt + i] = 'A';
-        }
-        //Battleship
-        randomInt = ThreadLocalRandom.current().nextInt(4, 7);
-        //System.out.println("Battleship random integer: " + randomIntB);
-        for (int i = 0; i < 4; i++) {
-            while (mySolution[randomInt][randomInt + i] != '.') {
-                randomInt = ThreadLocalRandom.current().nextInt(4, 7);
-            }
-            mySolution[randomInt + i][randomInt] = 'B';
-        }
-        //Cruiser
-        randomInt = ThreadLocalRandom.current().nextInt(3, 8);
-        //System.out.println("Cruiser random integer: " + randomIntB);
-        for (int i = 0; i < 3; i++) {
-            while (mySolution[randomInt][randomInt + i] != '.') {
-                randomInt = ThreadLocalRandom.current().nextInt(3, 8);
-            }
-            mySolution[randomInt][randomInt + i] = 'C';
-        }
-        //Destroyers
-        randomInt = ThreadLocalRandom.current().nextInt(2, 9);
-        //System.out.println("Destroyer random integer: " + randomIntD);
-        for (int j = 0; j < 2; j++) {
-            for (int i = 0; i < 2; i++) {
-                while (mySolution[randomInt][randomInt + i] != '.') {
-                    randomInt = ThreadLocalRandom.current().nextInt(2, 9);
-                }
-                mySolution[randomInt + i][randomInt] = 'D';
-            }
+    private void placeShips(char[][] board) {
+        for (int i = 0; i < ships.length; i++) {
+            ships[i].placeOnBoard(board);
         }
     }
 
